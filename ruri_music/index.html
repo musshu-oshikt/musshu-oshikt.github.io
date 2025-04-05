@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>るりMusic</title>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <style>
+        body{
+            margin: 0px;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        #header{
+            display: flex;
+            height: 56px;
+            background-color: #2887FF;
+        }
+        .header_left{
+            width: 50%;
+        }
+        .header_right{
+            width: 50%;
+        }
+        .header_title{
+            padding:10px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 32px;
+        }
+        .main_contents {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .play_column{
+            display:flex;
+        }
+        .img_middle{
+            position: relative;
+        /*    top: 10%; */
+        }
+        .play_info{
+            max-width: 500px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        .play_info input{
+            padding: 1px;
+            outline: none;
+            border: none;
+        }
+        #video-container {
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16 / 9;
+            background: #ffffff;
+            border-radius: 8px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #controls {
+            width: 60%;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-left: 20px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+/*            border: 1px solid #ccc;*/
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        /*
+        button {
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        */
+        /*
+        #notes-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background: #ffffff;
+        }
+        */
+        #times{
+            display: flex;
+            gap: 5px;
+        }
+        #timedisplay{
+            outline: none;
+            border: none;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+/*            width: 100%;
+            background: #e9ecef;*/
+            padding-left: 10px;
+            margin: 2px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        li input {
+            width: 70%;
+        }
+        span{
+            white-space: nowrap;
+        }
+        .scroll_animation{
+            animation: marquee 10s linear infinite;
+        }
+        .note-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        @media (max-width: 768px) {
+            .main_contents {
+                flex-direction: column;
+                align-items: center;
+            }
+            #controls {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 20px;
+            }
+        }
+        @keyframes marquee {
+            from {
+                transform: translate(0);
+            }
+            to {
+                transform: translate(-100%);
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- header -->
+<div id="header">
+    <div class="header_left">
+        <a class="header_title">るりMusic　～初稿～</a>
+    <!--
+    気力があれば更新します。    
+    -->
+    </div>
+    <div class="header_right">
+
+    </div>
+</div>
+<!-- main contents -->
+    <div class="main_contents">
+      <div id="video-container">
+          <input type="text" id="video-url" hidden/>
+<!--          <button onclick="loadVideo()">動画を読み込む</button> -->
+          <div id="player"></div>
+      </div>
+      <div id="controls">
+        <table id="playlist-table" class="display playlist-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>タイトル</th>
+                    <th>プレイリスト</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        let player;
+        let videoList;
+        let currentIndex = 0;
+        let pattern = 0;
+        let playerReady = false;
+        let inputForcus = false;
+        let videoIdList = [];
+        let notes = [];
+        
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '360',
+                width: '640',
+                videoId: '',
+                events: { onReady: onPlayerReady,
+                    onStateChange: onPlayerStateChange
+                 }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            videoList = $('#playlist-table').DataTable();
+            // テーブルにある動画をリストに格納
+            $('#playlist-table tbody tr').each(function() {
+                videoIdList.push($(this).attr('id'));
+            });
+        
+
+// 最初の動画を画面に反映
+//なんか、自動再生されるんですけど……=>悔しいけど実装しない。誤魔化せ！
+//    if (videoIdList.length > 0) {
+//        playVideoAtTime(videoIdList,currentIndex);
+//    }
+// クリックして再生
+           $('#playlist-table tbody').on('click', 'tr', function () {
+                currentIndex = videoList.row(this).index();
+                playVideoAtTime(videoIdList,currentIndex);
+            });
+
+            playerReady = true;
+            document.addEventListener('keydown', handleKeyPress);
+        }
+        function onPlayerStateChange(event) {
+            let isPlaying = document.getElementById('play_checkbox');
+            var ytcurrentTime = player.getCurrentTime();
+            if(event.data == 1){
+//                $('#video_play').removeClass('dli-video_play').addClass('dli-video_pause');
+                isPlaying.checked = true;
+            }else if(event.data == 2){
+//                $('#video_play').removeClass('dli-video_pause').addClass('dli-video_play');
+                isPlaying.checked = false;
+            }else if(event.data == YT.PlayerState.ENDED && ytcurrentTime != 0) {
+                //                pattern = Number($('#pattern').val());
+                pattern = 0;
+                playNextVideo(pattern);
+            }
+        }    
+ 
+
+
+
+    
+        function loadVideo() {
+            if (!playerReady) {
+                alert('プレイヤーの準備が完了するまでお待ちください');
+                return;
+            }
+            const url = document.getElementById('video-url').value;
+            const videoId = extractVideoId(url);
+            if (videoId) player.loadVideoById(videoId);
+        }
+        
+        function extractVideoId(url) {
+            if (url.indexOf('youtu.be') !== -1) {
+                let editval = url.replace('https://youtu.be/', '');
+                return editval.split("?")[0] || '';
+            }else if (url.indexOf('live') !== -1) {
+                let editval = url.replace('https://www.youtube.com/live/', '');
+                editval = editval.replace('https://youtube.com/live/', '');
+                return editval.split("?")[0] || '';
+            }else if (url.indexOf('shorts') !== -1) {
+                let editval = url.replace('https://www.youtube.com/shorts/', '');
+                editval = editval.replace('https://youtube.com/shorts/', '');
+                return editval.split("?")[0] || '';
+            } else {
+                const match = url.match(/[?&]v=([^&]+)/);
+                return match ? match[1] : null;
+            }
+        }
+        
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+            const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            return `${h}:${m}:${s}`;
+        }
+        function setCurrenttime(){
+            document.getElementById('timehidden').value = player.getCurrentTime();
+            document.getElementById('timedisplay').value = formatTime(player.getCurrentTime());
+        }
+        function saveNote() {
+            if (!playerReady) return;
+//            const time = document.getElementById('timehidden').value;
+            const time = player.getCurrentTime();
+            const note = document.getElementById('note').value;
+            notes.push({ time, note });
+            notes.sort((a, b) => a.time - b.time);
+            renderNotes();
+        }
+        function playNextVideo(i_type) {
+            if (i_type == 0) {
+                currentIndex++;
+                if (currentIndex >= videoIdList.length) {
+                currentIndex = 0;
+                }
+            } else if (i_type == 1) {
+                currentIndex--;
+                    if (currentIndex < 0) {
+                    currentIndex = videoIdList.length - 1;
+                    }
+            }
+            playVideoAtTime(videoIdList,currentIndex);
+        }
+        /*
+        function renderNotes() {
+            notes.sort((a, b) => a.time - b.time); // 描画前にソート
+            const notesList = document.getElementById('notes-list');
+            notesList.innerHTML = '';
+            notes.forEach(({ time, note }, index) => {
+                const li = document.createElement('li');
+                const timeButton = document.createElement('button');
+                timeButton.textContent = formatTime(time);
+                timeButton.onclick = () => player.seekTo(time, true);
+                const noteInput = document.createElement('input');
+                noteInput.type = 'text';
+                noteInput.value = note;
+                noteInput.onchange = () => notes[index].note = noteInput.value;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '削除';
+                deleteButton.onclick = () => { notes.splice(index, 1); renderNotes(); };
+                const buttonContainer = document.createElement('div');
+                buttonContainer.classList.add('note-buttons');
+                buttonContainer.appendChild(timeButton);
+                buttonContainer.appendChild(deleteButton);
+                li.appendChild(noteInput);
+                li.appendChild(buttonContainer);
+                notesList.appendChild(li);
+            });
+        }
+        */
+        function handleKeyPress(event) {
+            if (!playerReady) return;
+            if(inputForcus) return;
+            switch(event.key) {
+                case 'k': player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); break;
+                case 'j': player.seekTo(player.getCurrentTime() - 10, true); break;
+                case 'l': player.seekTo(player.getCurrentTime() + 10, true); break;
+                case 'ArrowLeft': player.seekTo(player.getCurrentTime() - 5, true); break;
+                case 'ArrowRight': player.seekTo(player.getCurrentTime() + 5, true); break;
+                case 'u': player.seekTo(player.getCurrentTime() - 1, true); break;
+                case 'i': player.seekTo(player.getCurrentTime() + 1, true); break;
+            }
+        }
+        function func_title(i_data){
+        let imgs = `<img width="80" height="60" src="https://i.ytimg.com/vi/${i_data.videoid}/default.jpg" loading="lazy" class="img_middle">`
+        let titles = `<input type="text" value="${i_data.musictitle}" readonly/>`
+        let singer = `<input type="text" value="${i_data.singer}" readonly/>`
+        let artists = `<input type="text" value="${i_data.artist}" readonly/>`
+        let div_info = '<div class="play_column"><div>'+ imgs +'</div>' + '<div class="play_info">'+ titles + artists + singer +'</div></div>'
+            return div_info
+        }
+    let option = {
+        ajax: {
+            dataSrc: '',
+            type: 'GET',
+            url: 'http://www.nijiuta.shop/api/utawaku/',
+            data: function(d) {
+                d.q = '栞葉るり';
+//                d.tags = tags;
+//                d.filters = filters;
+            }
+        },
+        columns:[
+            {'data':'id'},
+            {'data':'musictitle'},
+            {'data':null
+            ,render:function(data, type, row){
+                return func_title(data)
+            }}
+            ],
+        createdRow: function(row, data, dataIndex) {
+            // 各 <tr> タグにカスタム属性を追加
+            $(row).attr('id', 'row-' + data.id);
+            $(row).attr('data-video-id', data.videoid);
+            $(row).attr('data-start', data.time_s);
+            $(row).attr('data-end', data.time_e);
+        },
+        language: {
+            search: "リスト内検索:",
+        },
+        scrollY: 500,
+        scrollX: false,
+        paging: false,
+        columnDefs:[{targets: 0 ,visible: false},{targets: 1 ,visible: false}]
+
+    };
+    $('#playlist-table').DataTable(option);
+    // 再生
+function playVideoAtTime(arr_videolist, int_index){
+    let singerlist = [];
+    let alllist = [];
+    const nextRowId = arr_videolist[int_index];
+    const nextRow = $(`#${nextRowId}`);
+    const nextVideoId = nextRow.attr('data-video-id');
+    const startTime = parseInt(nextRow.attr('data-start')) || 0;
+    const endTime = parseInt(nextRow.attr('data-end')) || 999999;
+    /*
+    const musictitle = nextRow.find('div')[2].children[0].value;
+    const artist = nextRow.find('div')[2].children[1].value;
+    */
+    let id = Number(nextRowId.replace('row-',''))
+    /*
+    $('#musictitle').val(musictitle);
+    $('#artist').val(artist);
+    */
+//
+    if(nextVideoId){
+        player.loadVideoById({
+            videoId: nextVideoId,
+            startSeconds: startTime,
+            endSeconds: endTime
+        });
+    }
+}
+    </script>
+</body>
+</html>
