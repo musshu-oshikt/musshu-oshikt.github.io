@@ -262,6 +262,7 @@
 
 // クリックして再生
            $('#playlist-table tbody').on('click', 'tr', function () {
+               alert('click');
                 currentIndex = videoList.row(this).index();
                 playVideoAtTime(videoIdList,currentIndex);
             });
