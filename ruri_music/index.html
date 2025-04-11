@@ -245,7 +245,7 @@
             player = new YT.Player('player', {
                 height: '360',
                 width: '640',
-                videoId: 'ZeFvqdvutb4',
+                videoId: '',
                 events: { onReady: onPlayerReady,
                     onStateChange: onPlayerStateChange
                  }
@@ -262,7 +262,7 @@
 
 // クリックして再生
            $('#playlist-table tbody').on('click', 'tr', function () {
-               alert('click');
+//               alert('click');
                 currentIndex = videoList.row(this).index();
                 playVideoAtTime(videoIdList,currentIndex);
             });
