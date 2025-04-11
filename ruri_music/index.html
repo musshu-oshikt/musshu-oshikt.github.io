@@ -232,6 +232,20 @@
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
+  const newDiv = document.createElement("div");
+  newDiv.id = 'aaa';
+// いくつかの内容を与えます
+const newContent = document.createTextNode("みなさん、こんにちは！");
+
+
+// テキストノードを新規作成した div に追加します
+newDiv.appendChild(newContent);
+
+// DOM に新しく作られた要素とその内容を追加します
+const currentDiv = document.body.firstChild;
+document.body.insertBefore(newDiv, currentDiv);
+    </script>
+    <script>
         let player;
         let videoList;
         let currentIndex = 0;
@@ -242,14 +256,19 @@
         let notes = [];
         
         function onYouTubeIframeAPIReady() {
+            try{
             player = new YT.Player('player', {
                 height: '360',
                 width: '640',
                 videoId: '',
                 events: { onReady: onPlayerReady,
-                    onStateChange: onPlayerStateChange
+                          onStateChange: onPlayerStateChange,
+                          onError:onPlayerError
                  }
             });
+            }catch(e){
+                alert(e);
+            }
         }
         
         function onPlayerReady(event) {
@@ -259,14 +278,14 @@
                 videoIdList.push($(this).attr('id'));
             });
         
-
-// クリックして再生
-           $('#playlist-table tbody').on('click', 'tr', function () {
-//               alert('click');
+            
+            // クリックして再生
+            $('#playlist-table tbody').on('click', 'tr', function () {
+                alert('click');
                 currentIndex = videoList.row(this).index();
                 playVideoAtTime(videoIdList,currentIndex);
             });
-
+            
             playerReady = true;
             document.addEventListener('keydown', handleKeyPress);
         }
@@ -278,6 +297,27 @@
                 playNextVideo(pattern);
             }
         }   
+        function onPlayerError(event) {
+        let errorMessage = '';
+        switch (event.data) {
+            case 2:
+                errorMessage = '無効なパラメータです';
+                break;
+            case 5:
+                errorMessage = 'HTML5プレーヤーのエラーです';
+                break;
+            case 100:
+                errorMessage = '動画が見つかりません';
+                break;
+            case 101:
+            case 150:
+                errorMessage = 'この動画は埋め込み再生が許可されていません';
+                break;
+            default:
+                errorMessage = '不明なエラーが発生しました';
+        }
+        alert(errorMessage);
+    }
         function loadVideo() {
             if (!playerReady) {
                 alert('プレイヤーの準備が完了するまでお待ちください');
@@ -316,6 +356,7 @@
             document.getElementById('timehidden').value = player.getCurrentTime();
             document.getElementById('timedisplay').value = formatTime(player.getCurrentTime());
         }
+        /*
         function saveNote() {
             if (!playerReady) return;
 //            const time = document.getElementById('timehidden').value;
@@ -325,6 +366,7 @@
             notes.sort((a, b) => a.time - b.time);
             renderNotes();
         }
+        */
         function playNextVideo(i_type) {
             if (i_type == 0) {
                 currentIndex++;
@@ -413,6 +455,16 @@ function playVideoAtTime(arr_videolist, int_index){
         });
     }
 }
+// 再生リストの並び順変更
+function Playsort(){
+  let pattern = $('#pattern').val()
+  if(Number(pattern) == 0){
+    videoIdList.sort((a,b) => (a < b ? -1 : 1));
+  }else if(Number(pattern) == 2){
+    videoIdList.sort(() => Math.random() - 0.5);
+  }
+}
+
 $('#config').on('click',function(){
     alert('syori')
 })
