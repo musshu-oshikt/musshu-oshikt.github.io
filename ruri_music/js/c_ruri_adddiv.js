@@ -15,7 +15,7 @@ function makeHtml(){
     vhtml = vhtml + '</div>'
     vhtml = vhtml + '<select id="sleep_timer">'
     vhtml = vhtml + '  <option value="0">OFF</option>'
-    vhtml = vhtml + '  <option value="1">10分</option>'
+    vhtml = vhtml + '  <option value="10">10分</option>'
     vhtml = vhtml + '  <option value="15">15分</option>'
     vhtml = vhtml + '  <option value="20">20分</option>'
     vhtml = vhtml + '  <option value="30">30分</option>'
