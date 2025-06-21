@@ -12,11 +12,11 @@ let option = {
     ajax: {
         dataSrc: '',
         type: 'GET',
-        url: 'https://nijiuta.shop/api/utawaku/',
+        url: 'https://nijiuta.shop/api/songs/',
         data: function(d) {
+            d.get_type = 'query';
             d.q = '栞葉るり';
-//                d.tags = tags;
-//                d.filters = filters;
+            d.q_type = '11111';
             }
         },
         columns:[
