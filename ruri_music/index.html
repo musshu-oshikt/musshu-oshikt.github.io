@@ -7,166 +7,7 @@
     <link rel="stylesheet" href="./CSS/adddiv.css">
     <link rel="stylesheet" href="./CSS/selectline.css">
     <link rel="stylesheet" href="./CSS/messagewindow.css">
-<style>
-body{
-    margin: 0px;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-}
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-#header{
-    display: flex;
-    height: 56px;
-    padding: 0px;
-    background-color: #2887FF;/* ここは自由にしていいところ→推し色に染めて */
-}
-#playinginfo{
-  display: flex;
-  flex-direction: column;
-  max-height:300px;
-}
-#playlist-field {
-  display: flex;
-  max-height:450px;
-  margin-top:3px;
-  overflow: auto;
-  flex-direction: column;
-  border: 1px solid #000000;
-}
-#video-container {
-  width: 100%;
-  max-width: 1280px;
-  aspect-ratio: 16 / 9;
-  border-radius: 8px;
-}
-#video-container div{
-  background: #ffffff;
-}
-#controls {
-  width: 60%;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-left: 20px;
-}
-#search{
-  min-width: 150px;
-}
-.overhidden{
-  overflow: hidden;
-}
-.play_column{
-    display:flex;
-}
-.top-center{
-  display: flex;
-  align-items: center;
-}
-.flex-right{
-  justify-content: flex-end;
-}
-.item input[type="checkbox"]:checked ~ .content {
-  display: none;
-}
-.item input[name="selectitem"]:checked ~ .content {
-  background-color: #ffa028;
-}
-.content:hover{
-  background-color: #cccccc;
-  cursor:pointer;
-}
-.content {
-/*  padding: 10px;
-  background: #f0f0f0;*/
-  border: 1px solid #ccc;
-  width: calc(100% - 2px);
-}
-/* ここは自由にしていいところ */
-.header_title{
-    padding:10px;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 32px;
-}
-.main_contents {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
-}
-.input-bordernone{
-  border-radius: 5px;
-  font-size:100%;
-  background: transparent;
-  outline: none;
-  border: none;
-}
-.img_middle{
-    position: relative;
-    top: 0px;
-}
-
-.play_info{
-    max-width: 500px;
-    width: 100%;
-    overflow-x: hidden;
-}
-.nowloading{
-  top:0px;
-  left:0px;
-  width:100%;
-  height:100%;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position:absolute;
-  z-index: 999;
-}
-/*test*/
-.tooltip {
-  position: absolute;
-  top: 30px;  /* guideアイコンより上に表示 */
-  left: 100%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 5px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-@keyframes fadeOut {
-  0% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-.fade-out {
-  animation: fadeOut 0.3s forwards;
-}
-@media (max-width: 768px) {
-  .main_contents {
-    flex-direction: column;
-    align-items: center;
-  }
-  #controls {
-    width: 100%;
-    margin-left: 0;
-    margin-top: 20px;
-  }
-}
-</style>
+    <link rel="stylesheet" href="./CSS/ruri_main.css">
 
 </head>
 <body>
@@ -259,7 +100,7 @@ iframe {
           インターネットのみんなたち様、ご機嫌麗しゅう！<br>
           にじさんじ所属、バーチャルライバーの<a href="https://www.youtube.com/@ShiorihaRuri">栞葉るり</a>さんの<b>非公式ファンサイト</b>です。<br>
           栞葉るりさん、およびANYCOLOR株式会社とは一切関係はありません。<br>
-          また、データは<a href="https://nijiuta.shop/">にじうた　データベース</a>から取得しております。<br>
+          また、データは<a href="http://nijiuta.s322.xrea.com/">にじうた　データベース</a>から取得しております。<br>
           こちらも使っていただけると幸いです。
         </p>
     </div>
@@ -318,4 +159,5 @@ iframe {
     setAction();
   </script>
 </body>
+
 </html>
