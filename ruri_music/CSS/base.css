@@ -1,0 +1,106 @@
+/******************/
+/* font  */
+/******************/
+.fontsize-16pt{
+  font-size:16pt;
+}
+.fontsize-14pt{
+  font-size:14pt;
+}
+.fontsize-12pt{
+  font-size:12pt;
+}
+.fontsize-32pt{
+  font-size:32pt;
+}
+/******************/
+/* position  */
+/******************/
+.top0{
+  top:0px;
+}
+.left0{
+  left:0px;
+}
+.bottom0{
+  bottom:0px;
+}
+.textright{
+  text-align: right;
+}
+/******************/
+/* color  */
+/******************/
+.white{
+  color:#ffffff;
+}
+/******************/
+/* size  */
+/******************/
+.width100{
+  width:100%;
+}
+.height100{
+  height:100%;
+}
+.width50{
+  width:50%;
+}
+.height50{
+  height:50%;
+}
+.width30{
+  width:30%;
+}
+.height30{
+  height:30%;
+}
+.width10{
+  width:10%;
+}
+.height10{
+  height:10%;
+}
+/******************/
+/* object  */
+/******************/
+.button {
+  cursor: pointer;
+  border-radius: 6px;
+}
+.button:hover {
+  opacity: 0.5;
+}
+.button-red {
+  color: white;
+  border: none;
+  background-color: red;
+}
+.button-blue {
+  color: white;
+  border: none;
+  background-color: blue;
+}
+.button-inimg {
+  border: none;
+  background: transparent;
+}
+.button-base{
+   padding: 10px 16px;
+   cursor: pointer;
+   border: none;
+   border-radius: 6px;
+   background: #2b3a4e;
+   color: white;
+}
+.a-link{
+  position: absolute;
+  top: 0;
+  left: 0;
+  height:100%;
+  width: 100%;
+}
+.a-link:hover {
+  opacity: 0.1;
+  background-color: #000000;
+}

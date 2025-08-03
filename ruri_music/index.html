@@ -1,86 +1,321 @@
-<!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>るりMusic</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="./CSS/c_adddiv.css">
-    <link rel="stylesheet" href="./CSS/c_messagewindow.css">
-    <link rel="stylesheet" href="./CSS/ruri_main.css">
-    <link rel="stylesheet" href="./CSS/c_selectline.css">
+    <link rel="stylesheet" href="./CSS/base.css">
+    <link rel="stylesheet" href="./CSS/adddiv.css">
+    <link rel="stylesheet" href="./CSS/selectline.css">
+    <link rel="stylesheet" href="./CSS/messagewindow.css">
+<style>
+body{
+    margin: 0px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+#header{
+    display: flex;
+    height: 56px;
+    padding: 0px;
+    background-color: #2887FF;/* ここは自由にしていいところ→推し色に染めて */
+}
+#playinginfo{
+  display: flex;
+  flex-direction: column;
+  max-height:300px;
+}
+#playlist-field {
+  display: flex;
+  max-height:450px;
+  margin-top:3px;
+  overflow: auto;
+  flex-direction: column;
+  border: 1px solid #000000;
+}
+#video-container {
+  width: 100%;
+  max-width: 1280px;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+}
+#video-container div{
+  background: #ffffff;
+}
+#controls {
+  width: 60%;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-left: 20px;
+}
+#search{
+  min-width: 150px;
+}
+.overhidden{
+  overflow: hidden;
+}
+.play_column{
+    display:flex;
+}
+.top-center{
+  display: flex;
+  align-items: center;
+}
+.flex-right{
+  justify-content: flex-end;
+}
+.item input[type="checkbox"]:checked ~ .content {
+  display: none;
+}
+.item input[name="selectitem"]:checked ~ .content {
+  background-color: #ffa028;
+}
+.content:hover{
+  background-color: #cccccc;
+  cursor:pointer;
+}
+.content {
+/*  padding: 10px;
+  background: #f0f0f0;*/
+  border: 1px solid #ccc;
+  width: calc(100% - 2px);
+}
+/* ここは自由にしていいところ */
+.header_title{
+    padding:10px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 32px;
+}
+.main_contents {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+.input-bordernone{
+  border-radius: 5px;
+  font-size:100%;
+  background: transparent;
+  outline: none;
+  border: none;
+}
+.img_middle{
+    position: relative;
+    top: 0px;
+}
+
+.play_info{
+    max-width: 500px;
+    width: 100%;
+    overflow-x: hidden;
+}
+.nowloading{
+  top:0px;
+  left:0px;
+  width:100%;
+  height:100%;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position:absolute;
+  z-index: 999;
+}
+/*test*/
+.tooltip {
+  position: absolute;
+  top: 30px;  /* guideアイコンより上に表示 */
+  left: 100%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.fade-out {
+  animation: fadeOut 0.3s forwards;
+}
+@media (max-width: 768px) {
+  .main_contents {
+    flex-direction: column;
+    align-items: center;
+  }
+  #controls {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 20px;
+  }
+}
+</style>
+
 </head>
 <body>
-<!-- header -->
-<div id="header">
-    <div class="header_left">
-        <a class="header_title">るりMusic　～第二稿～</a>
-    <!--
-    気力があれば更新します。    
-    -->
-    </div>
-    <div class="header_right">
-        <div id="config">
-            <style type="text/css">
-                .st0{fill:#4B4B4B;}
-            </style>
-            <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="width: 32px; height: 32px; opacity: 1;" xml:space="preserve">
-              <g>
-                  <path class="st0" d="M499.453,210.004l-55.851-2.58c-5.102-0.23-9.608-3.395-11.546-8.103l-11.508-27.695
-                  c-1.937-4.728-0.997-10.145,2.455-13.914l37.668-41.332c4.718-5.188,4.546-13.205-0.421-18.182l-46.434-46.443
-        c-4.986-4.967-13.003-5.159-18.2-0.412l-41.312,37.668c-3.778,3.443-9.206,4.402-13.924,2.436l-27.694-11.488
-        c-4.718-1.946-7.864-6.454-8.094-11.565l-2.589-55.831C301.675,5.534,295.883,0,288.864,0h-65.708
-        c-7.02,0-12.831,5.534-13.156,12.562l-2.571,55.831c-0.23,5.111-3.376,9.618-8.094,11.565L171.64,91.447
-        c-4.737,1.966-10.165,1.007-13.924-2.436l-41.331-37.668c-5.198-4.746-13.215-4.564-18.201,0.412L51.769,98.198
-        c-4.986,4.977-5.158,12.994-0.422,18.182l37.668,41.332c3.452,3.769,4.373,9.186,2.416,13.914l-11.469,27.695
-        c-1.956,4.708-6.444,7.873-11.564,8.103l-55.832,2.58c-7.019,0.316-12.562,6.118-12.562,13.147v65.699
-        c0,7.019,5.543,12.83,12.562,13.148l55.832,2.579c5.12,0.229,9.608,3.394,11.564,8.103l11.469,27.694
-        c1.957,4.728,1.036,10.146-2.416,13.914l-37.668,41.313c-4.756,5.217-4.564,13.224,0.403,18.201l46.471,46.443
-        c4.967,4.977,12.965,5.15,18.182,0.422l41.312-37.677c3.759-3.443,9.207-4.392,13.924-2.435l27.694,11.478
-        c4.719,1.956,7.864,6.464,8.094,11.575l2.571,55.831c0.325,7.02,6.136,12.562,13.156,12.562h65.708
-        c7.02,0,12.812-5.542,13.138-12.562l2.589-55.831c0.23-5.111,3.376-9.619,8.094-11.575l27.694-11.478
-        c4.718-1.957,10.146-1.008,13.924,2.435l41.312,37.677c5.198,4.728,13.215,4.555,18.2-0.422l46.434-46.443
-        c4.967-4.977,5.139-12.984,0.421-18.201l-37.668-41.313c-3.452-3.768-4.412-9.186-2.455-13.914l11.508-27.694
-        c1.937-4.709,6.444-7.874,11.546-8.103l55.851-2.579c7.019-0.318,12.542-6.129,12.542-13.148v-65.699
-        C511.995,216.122,506.472,210.32,499.453,210.004z M256.01,339.618c-46.164,0-83.622-37.438-83.622-83.612
-        c0-46.184,37.458-83.622,83.622-83.622s83.602,37.438,83.602,83.622C339.612,302.179,302.174,339.618,256.01,339.618z" style="fill: rgb(201, 201, 201);"></path>
-              </g>
-            </svg>
-        </div>
-    </div>
+<!-- 待機画面 -->
+<div id="nowloading" class="nowloading">
+  <img src="./img/dota.gif" style="width:108px; height:192px;" >
 </div>
-<!-- main contents -->
-    <div class="main_contents">
-      <div id="video-container">
-          <div id="player"></div>
-      </div>
-      <div id="controls">
-        <table id="playlist-table" class="display playlist-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>タイトル</th>
-                    <th>プレイリスト</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+<!-- 別ウィンドウ -->
+<div id="div_addframe" style="display:none;">
+  <div id="forms">
+    <div id="close_position">
+      <button id="close_button">
+        <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewbox="0 -960 960 960" width="32px" fill="#434343">
+          <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <div id="mod_contents">
+      <div id="config_contents">
+        <div>経過時間:
+          <span id="elapsed">00:00</span>
+        </div>
+        <label>スリープタイマー： </label>
+        <select id="sleep_timer">
+          <option value="0">OFF</option>
+          <option value="10">10分</option>
+          <option value="15">15分</option>
+          <option value="20">20分</option>
+          <option value="30">30分</option>
+          <option value="45">45分</option>
+          <option value="60">60分</option>
+        </select>
+        <br><br>
+        <label>再生方法： </label>
+        <select id="playtype">
+          <option value="asc">連続再生</option>
+          <option value="random">ランダム</option>
+        </select>
       </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!--    <script src="https://www.youtube.com/iframe_api"></script> -->
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="./js/c_ruri_adddiv.js"></script>
-    <script src="./js/c_setMessage.js"></script>
-    <script src="./js/ruri_table.js"></script>
-    <script src="./js/ruri_yt-control.js"></script>
-<!--    <script src="./js/ruri_config.js"></script>-->
-    <script>
-$('#config').on('click',function(){
-    displaydiv(1);
-})
-    </script>
+  </div>
+</div>
+<!-- ヘッダー -->
+  <div id="header">
+    <div class="width50 top-center">
+      <a class="header_title">るりMusic</a>
+    </div>
+    <div class="width50 top-center flex-right">
+      <button id="config" class="button button-inimg">
+        <style type="text/css">
+            .st0{fill:#4B4B4B;}
+        </style>
+        <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="width: 32px; height: 32px; opacity: 1;" xml:space="preserve">
+          <g>
+            <path class="st0" d="M499.453,210.004l-55.851-2.58c-5.102-0.23-9.608-3.395-11.546-8.103l-11.508-27.695
+                  c-1.937-4.728-0.997-10.145,2.455-13.914l37.668-41.332c4.718-5.188,4.546-13.205-0.421-18.182l-46.434-46.443
+                  c-4.986-4.967-13.003-5.159-18.2-0.412l-41.312,37.668c-3.778,3.443-9.206,4.402-13.924,2.436l-27.694-11.488
+                  c-4.718-1.946-7.864-6.454-8.094-11.565l-2.589-55.831C301.675,5.534,295.883,0,288.864,0h-65.708
+                  c-7.02,0-12.831,5.534-13.156,12.562l-2.571,55.831c-0.23,5.111-3.376,9.618-8.094,11.565L171.64,91.447
+                  c-4.737,1.966-10.165,1.007-13.924-2.436l-41.331-37.668c-5.198-4.746-13.215-4.564-18.201,0.412L51.769,98.198
+                  c-4.986,4.977-5.158,12.994-0.422,18.182l37.668,41.332c3.452,3.769,4.373,9.186,2.416,13.914l-11.469,27.695
+                  c-1.956,4.708-6.444,7.873-11.564,8.103l-55.832,2.58c-7.019,0.316-12.562,6.118-12.562,13.147v65.699
+                  c0,7.019,5.543,12.83,12.562,13.148l55.832,2.579c5.12,0.229,9.608,3.394,11.564,8.103l11.469,27.694
+                  c1.957,4.728,1.036,10.146-2.416,13.914l-37.668,41.313c-4.756,5.217-4.564,13.224,0.403,18.201l46.471,46.443
+                  c4.967,4.977,12.965,5.15,18.182,0.422l41.312-37.677c3.759-3.443,9.207-4.392,13.924-2.435l27.694,11.478
+                  c4.719,1.956,7.864,6.464,8.094,11.575l2.571,55.831c0.325,7.02,6.136,12.562,13.156,12.562h65.708
+                  c7.02,0,12.812-5.542,13.138-12.562l2.589-55.831c0.23-5.111,3.376-9.619,8.094-11.575l27.694-11.478
+                  c4.718-1.957,10.146-1.008,13.924,2.435l41.312,37.677c5.198,4.728,13.215,4.555,18.2-0.422l46.434-46.443
+                  c4.967-4.977,5.139-12.984,0.421-18.201l-37.668-41.313c-3.452-3.768-4.412-9.186-2.455-13.914l11.508-27.694
+                  c1.937-4.709,6.444-7.874,11.546-8.103l55.851-2.579c7.019-0.318,12.542-6.129,12.542-13.148v-65.699
+                  C511.995,216.122,506.472,210.32,499.453,210.004z M256.01,339.618c-46.164,0-83.622-37.438-83.622-83.612
+                  c0-46.184,37.458-83.622,83.622-83.622s83.602,37.438,83.602,83.622C339.612,302.179,302.174,339.618,256.01,339.618z" style="fill: rgb(201, 201, 201);">
+            </path>
+          </g>
+        </svg>
+      </button>
+    </div>
+  </div>
+<!-- メインコンテンツ -->
+  <div class="main_contents">
+  <!-- 視聴画面 -->
+  <div class="width100">
+    <div id="video-container">
+      <div id="player"></div>
+    </div>
+    <div id="intro">
+      <h2>このサイトについて</h2>
+        <p>
+          インターネットのみんなたち様、ご機嫌麗しゅう！<br>
+          にじさんじ所属、バーチャルライバーの<a href="https://www.youtube.com/@ShiorihaRuri">栞葉るり</a>さんの<b>非公式ファンサイト</b>です。<br>
+          栞葉るりさん、およびANYCOLOR株式会社とは一切関係はありません。<br>
+          また、データは<a href="https://nijiuta.shop/">にじうた　データベース</a>から取得しております。<br>
+          こちらも使っていただけると幸いです。
+        </p>
+    </div>
+  </div>
+  <!-- コントローラー -->
+    <div id="controls">
+      <div id="playinginfo">
+      <span class="top-center"><a class="fontsize-16pt">Now Playing　</a>
+        <span id="guide" style="position: relative;">
+          <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="width: 32px; height: 32px; opacity: 1;" xml:space="preserve">
+            <style type="text/css">
+              .st0{fill:#4B4B4B;}
+            </style>
+            <g>
+              <path class="st0" d="M205.116,153.078c31.534,11.546,69.397-12.726,84.58-54.209c15.174-41.484,1.915-84.462-29.614-96.001
+                c-31.541-11.53-69.4,12.735-84.582,54.218C160.325,98.57,173.584,141.548,205.116,153.078z" style="fill: rgb(75, 75, 75);"></path>
+              <path class="st0" d="M85.296,219.239c32.987-2.86,56.678-40.344,52.929-83.75c-3.757-43.391-33.545-76.253-66.532-73.409
+                c-32.984,2.869-56.674,40.36-52.921,83.759C22.53,189.23,52.313,222.091,85.296,219.239z" style="fill: rgb(75, 75, 75);"></path>
+              <path class="st0" d="M342.196,217.768c28.952,17.017,70.552-0.073,92.926-38.154c22.374-38.106,17.041-82.758-11.915-99.774
+                c-28.951-17.001-70.56,0.097-92.93,38.178C307.905,156.117,313.245,200.768,342.196,217.768z" style="fill: rgb(75, 75, 75);"></path>
+              <path class="st0" d="M497.259,262.912c-18.771-27.271-63.07-29.379-98.954-4.694c-35.892,24.701-49.762,66.822-30.996,94.101
+                c18.766,27.27,63.069,29.38,98.954,4.686C502.143,332.312,516.021,290.191,497.259,262.912z" style="fill: rgb(75, 75, 75);"></path>
+              <path class="st0" d="M304.511,268.059c-3.58-24.773-18.766-47.366-43.039-58.824c-24.268-11.45-51.365-8.807-72.758,4.169
+                c-23.646,14.35-38.772,33.096-59.138,41.29c-20.363,8.193-77.4-16.209-112.912,48.278c-25.081,45.548-2.057,103.128,44.962,125.315
+                c35.738,16.864,64.023,14.981,84.788,24.774c20.762,9.793,37.29,32.83,73.025,49.692c47.018,22.188,106.1,3.362,125.315-44.957
+                c27.206-68.407-27.897-96.922-34.522-117.85C303.613,319.021,308.47,295.426,304.511,268.059z" style="fill: rgb(75, 75, 75);"></path>
+            </g>
+          </svg>
+  <div id="guide-tooltip" class="tooltip" style="display: none;">
+    <p>
+    以下のキー操作が出来ます。<br>
+      K :プレーヤーの一時停止 / 再生。<br>
+      N :次の動画を再生する。<br>
+      左・右矢印 :5秒戻す ・ 進める。<br>
+      J・L :10秒戻す ・ 進める。<br>
+    </p>
+  </div>
+        </span>
+      </span><br>
+        <input type="text" id="musictitle" class="width100 input-bordernone fontsize-14pt" readonly>
+        <input type="text" id="artist" class="width100 input-bordernone fontsize-14pt" readonly>
+        <input type="text" id="singer" class="width100 input-bordernone fontsize-14pt" readonly>
+      </div>
+      <div class="textright">
+        <input type="text" id="search" class="width30 fontsize-12pt" placeholder="検索"/>
+      </div>
+      <div id="playlist-field"></div>
+    </div>
+  </div>
+  <script src="./js/yourURL.js"></script>
+  <script src="./js/setMessage.js"></script>
+  <script src="./js/setSpreadsheet.js"></script>
+  <script src="./js/ruri_function.js"></script>
+  <script src="./js/setYoutube.js"></script>
+  <script>
+    setAction();
+  </script>
 </body>
 </html>
