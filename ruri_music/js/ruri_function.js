@@ -187,8 +187,12 @@ function crePlaylist(){
       playlistUl.appendChild(div);
       count++;
     }
-    //配列をコピーしておく(使うかは不明)
+    //件数を確認する
     playlength = val.length;
+    if (playlength == 0){
+        alert('エラー：ごめんなさい！しばらく時間をおいてから再度起こしください。m(_ _)m')
+        return;
+    }
     player.cueVideoById({
           videoId: val[0]['videoid'],
           startSeconds: val[0]['time_s'],
@@ -245,4 +249,5 @@ function playNextVideo(){
         Play(0); // 最初に戻る
       }
   }
+
 }
