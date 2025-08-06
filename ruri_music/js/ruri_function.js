@@ -139,6 +139,7 @@ function resetTimer() {
 ////////////////////////////////////////////////////
 function crePlaylist(){
  let count = 0;
+  try{
   playlistUl.innerHTML = ''; // 既存のリストをクリア
   setSpreadsheet(Url).then(val =>{
     for (v of val){
@@ -189,10 +190,6 @@ function crePlaylist(){
     }
     //件数を確認する
     playlength = val.length;
-    if (playlength == 0){
-        alert('エラー：ごめんなさい！しばらく時間をおいてから再度起こしください。m(_ _)m')
-        return;
-    }
     player.cueVideoById({
           videoId: val[0]['videoid'],
           startSeconds: val[0]['time_s'],
@@ -203,6 +200,10 @@ function crePlaylist(){
     document.getElementById('singer').value = val[0]['singer'];
     pagestart();
   })
+  }catch(e){
+      console.error(e)
+      alert('エラー：ごめんなさい！しばらく時間をおいてから再度起こしください。m(_ _)m')
+  }
 }
 ////////////////////////////////////////////////////
 function Play(i_index){
@@ -251,3 +252,4 @@ function playNextVideo(){
   }
 
 }
+
