@@ -266,7 +266,7 @@ function playNextVideo(){
   console.log(short_list)
   if (playOrder === 'random') {
       let nextIndex;
-      if(short_bool){
+      if(!short_bool){
         do {
             nextIndex = Math.floor(Math.random() * playlength);
         } while (nextIndex === currentIndex && playlength > 1); // 同じ曲が連続しないように
@@ -277,7 +277,7 @@ function playNextVideo(){
       }
       Play(nextIndex);
   } else { // sequential (降順)
-    if(short_bool){
+    if(!short_bool){
       do {
         newindex++;
       } while (short_list.indexOf(newindex) == -1);
@@ -297,7 +297,6 @@ function playNextVideo(){
   }
 
 }
-
 
 
 
