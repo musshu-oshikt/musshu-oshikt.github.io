@@ -77,7 +77,8 @@ function setAction(){
     }
   })
   document.getElementById('short_type').addEventListener("change", () => {
-      if(!document.getElementById('short_type').checked){
+    console.log(document.getElementById('short_type').checked)
+      if(!this.checked){
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
           if(item.dataset.video_type == "ショート"){
             item.style.display = "none";
@@ -278,8 +279,8 @@ function playNextVideo(){
     if(short_bool){
       do {
         newindex++;
-      } while (currentIndex >= playlength - 1 || short_list.indexOf(nextIndex) == -1);
-      if(currentIndex >= playlength - 1){
+      } while (newindex >= playlength - 1 || short_list.indexOf(newindex) == -1);
+      if(newindex >= playlength - 1){
         Play(0);
       }else{
         Play(newindex);
@@ -295,5 +296,4 @@ function playNextVideo(){
   }
 
 }
-
 
