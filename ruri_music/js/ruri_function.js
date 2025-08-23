@@ -77,8 +77,7 @@ function setAction(){
     }
   })
   document.getElementById('short_type').addEventListener("change", () => {
-    console.log(document.getElementById('short_type').checked)
-      if(!this.checked){
+      if(!document.getElementById('short_type').checked){
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
           if(item.dataset.video_type == "ショート"){
             item.style.display = "none";
@@ -296,4 +295,5 @@ function playNextVideo(){
   }
 
 }
+
 
