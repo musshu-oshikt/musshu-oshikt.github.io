@@ -72,9 +72,9 @@ function setAction(){
     }
   })
   document.querySelectorAll('#playlist-field .item').forEach(item =>{
-    if(item.dataset.video_type == "ショート"){
+//    if(item.dataset.video_type == "ショート"){
       short_list.push(item.dataset.index);
-    }
+//    }
   })
   document.getElementById('short_type').addEventListener("change", () => {
     console.log(document.getElementById('short_type').checked)
@@ -297,4 +297,5 @@ function playNextVideo(){
   }
 
 }
+
 
