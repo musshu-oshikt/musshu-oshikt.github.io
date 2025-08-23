@@ -77,7 +77,7 @@ function setAction(){
     }
   })
   document.getElementById('short_type').addEventListener("change", () => {
-    console.log(this.checked)
+    console.log(document.getElementById('short_type').checked)
       if(!this.checked){
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
           if(item.dataset.video_type == "ショート"){
