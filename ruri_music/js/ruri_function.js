@@ -263,6 +263,7 @@ function playNextVideo(){
   const playOrder = document.getElementById('playtype').value;
   let short_bool = document.getElementById('short_type').checked;
   let newindex = Number(currentIndex);
+  console.log(short_list)
   if (playOrder === 'random') {
       let nextIndex;
       if(short_bool){
