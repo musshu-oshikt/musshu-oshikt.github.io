@@ -279,6 +279,7 @@ function playNextVideo(){
     if(!short_bool){
       do {
         newindex++;
+        console.log(newindex)
       } while (short_list.indexOf(newindex) == -1);
       if(newindex < playlength){
         Play(newindex);
@@ -296,6 +297,7 @@ function playNextVideo(){
   }
 
 }
+
 
 
 
