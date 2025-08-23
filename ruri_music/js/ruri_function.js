@@ -271,7 +271,7 @@ function playNextVideo(){
       }else{
         do {
             nextIndex = Math.floor(Math.random() * playlength);
-        } while (nextIndex === currentIndex && playlength > 1 && short_list.indexOf(nextIndex) == -1); // 同じ曲が連続しないように
+        } while (nextIndex === currentIndex && playlength > 1 && short_list.indexOf(nextIndex) > -1); // 同じ曲が連続しないように
       }
       Play(nextIndex);
   } else { // sequential (降順)
@@ -295,6 +295,7 @@ function playNextVideo(){
   }
 
 }
+
 
 
 
