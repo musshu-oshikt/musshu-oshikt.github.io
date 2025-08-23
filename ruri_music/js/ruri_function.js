@@ -73,7 +73,15 @@ function setAction(){
   document.getElementById('short_type').addEventListener("change", () => {
       if(!this.checked){
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
-          console.log(item)
+          if(item.dataset.video_type == "ショート"){
+            item.style.display = "none";
+          }
+        })
+      }else{
+        document.querySelectorAll('#playlist-field .item').forEach(item =>{
+          if(item.dataset.video_type == "ショート"){
+            item.style.display = "";
+          }
         })
       }
   });
@@ -144,15 +152,6 @@ function resetTimer() {
     clearInterval(interval);
 //    startTimer();
 }
-
-////////////////////////////////////////////////////
-// video_typeごとに
-function setVideo_type(){
-  document.querySelectorAll('input[name="video_type"]:checked').forEach(vt =>{
-    console.log(vt);
-  })
-}
-
 
 ////////////////////////////////////////////////////
 function crePlaylist(){
@@ -271,5 +270,4 @@ function playNextVideo(){
   }
 
 }
-
 
