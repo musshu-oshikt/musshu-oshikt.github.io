@@ -262,7 +262,6 @@ function playNextVideo(){
   const playOrder = document.getElementById('playtype').value;
   let short_bool = document.getElementById('short_type').checked;
   let newindex = Number(currentIndex);
-  console.log(short_list)
   if (playOrder === 'random') {
       let nextIndex;
       if(!short_bool){
@@ -279,8 +278,7 @@ function playNextVideo(){
     if(!short_bool){
       do {
         newindex++;
-        console.log(newindex)
-      } while (short_list.indexOf(newindex) > -1 || newindex > 100);
+      } while (short_list.indexOf(newindex) > -1);
       if(newindex < playlength){
         Play(newindex);
       }else{
@@ -297,6 +295,7 @@ function playNextVideo(){
   }
 
 }
+
 
 
 
