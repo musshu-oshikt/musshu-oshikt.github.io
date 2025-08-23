@@ -73,7 +73,7 @@ function setAction(){
   document.getElementById('short_type').addEventListener("change", () => {
       if(!this.checked){
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
-          console.log(item.videoid)
+          console.log(item)
         })
       }
   });
@@ -271,4 +271,5 @@ function playNextVideo(){
   }
 
 }
+
 
