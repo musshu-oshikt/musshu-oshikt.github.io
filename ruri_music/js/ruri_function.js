@@ -280,10 +280,10 @@ function playNextVideo(){
       do {
         newindex++;
       } while (short_list.indexOf(newindex) == -1);
-      if(newindex >= playlength - 1){
-        Play(0);
-      }else{
+      if(newindex < playlength){
         Play(newindex);
+      }else{
+        Play(0);
       }
     }else{
       if (currentIndex < playlength - 1) {
@@ -296,7 +296,6 @@ function playNextVideo(){
   }
 
 }
-
 
 
 
