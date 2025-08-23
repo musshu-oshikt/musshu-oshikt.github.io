@@ -1,6 +1,6 @@
 /*  ID  */
 #div_addframe{
-    position: absolute;
+    position: fixed;
     top: 0px;
     background-size: cover;
     width: 100%;
@@ -38,4 +38,5 @@
 }
 #mod_contents div{
   padding :10px;
+
 }
