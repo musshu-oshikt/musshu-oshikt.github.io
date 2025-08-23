@@ -6,6 +6,7 @@ let currentIndex = 0;
 let playlength = 0;
 let timer;
 let interval;
+let short_list = [];
 const playlistUl = document.getElementById('playlist-field');
 ////////////////////////////////////////////////////////////
 // ファンクション
@@ -70,7 +71,13 @@ function setAction(){
         startTimer(this.value);
     }
   })
+  document.querySelectorAll('#playlist-field .item').forEach(item =>{
+    if(item.dataset.video_type == "ショート"){
+      short_list.push(item.dataset.index);
+    }
+  })
   document.getElementById('short_type').addEventListener("change", () => {
+    console.log(this.checked)
       if(!this.checked){
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
           if(item.dataset.video_type == "ショート"){
@@ -80,7 +87,7 @@ function setAction(){
       }else{
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
           if(item.dataset.video_type == "ショート"){
-            item.style.display = "";
+            item.style.display = "block";
           }
         })
       }
@@ -254,19 +261,38 @@ function updVideoinfo(i_index){
 ////////////////////////////////////////////////////
 function playNextVideo(){
   const playOrder = document.getElementById('playtype').value;
+  let short_bool = document.getElementById('short_type').checked;
+  let newindex = Number(currentIndex);
   if (playOrder === 'random') {
       let nextIndex;
-      do {
-          nextIndex = Math.floor(Math.random() * playlength);
-      } while (nextIndex === currentIndex && playlength > 1); // 同じ曲が連続しないように
+      if(short_bool){
+        do {
+            nextIndex = Math.floor(Math.random() * playlength);
+        } while (nextIndex === currentIndex && playlength > 1); // 同じ曲が連続しないように
+      }else{
+        do {
+            nextIndex = Math.floor(Math.random() * playlength);
+        } while (nextIndex === currentIndex && playlength > 1 && short_list.indexOf(nextIndex) == -1); // 同じ曲が連続しないように
+      }
       Play(nextIndex);
   } else { // sequential (降順)
+    if(short_bool){
+      do {
+        newindex++;
+      } while (currentIndex >= playlength - 1 || short_list.indexOf(nextIndex) == -1);
+      if(currentIndex >= playlength - 1){
+        Play(0);
+      }else{
+        Play(newindex);
+      }
+    }else{
       if (currentIndex < playlength - 1) {
         Play(Number(currentIndex) + 1);
       } else {
         currentIndex = 0;
         Play(0); // 最初に戻る
       }
+    }
   }
 
 }
