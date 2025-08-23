@@ -61,7 +61,7 @@ function setAction(){
   guideIcon.addEventListener('mouseleave', () => {
     tooltip.style.display = 'none';
   });
-  ////////////////////////////////////////////////////
+  //スリープタイマー設定
   document.getElementById('sleep_timer').addEventListener('change',function(){
     if(this.value == 0){
         document.getElementById("elapsed").textContent = formatTime(0);
@@ -70,6 +70,15 @@ function setAction(){
         startTimer(this.value);
     }
   })
+  document.getElementById('short_type').addEventListener("change", () => {
+      if(!this.checked){
+        document.querySelectorAll('#playlist-field .item').forEach(item =>{
+          console.log(item.videoid)
+        })
+      }
+  });
+  
+  
 }
 ////////////////////////////////////////////////////
 function pagestart(){
@@ -137,6 +146,15 @@ function resetTimer() {
 }
 
 ////////////////////////////////////////////////////
+// video_typeごとに
+function setVideo_type(){
+  document.querySelectorAll('input[name="video_type"]:checked').forEach(vt =>{
+    console.log(vt);
+  })
+}
+
+
+////////////////////////////////////////////////////
 function crePlaylist(){
  let count = 0;
   try{
@@ -152,6 +170,7 @@ function crePlaylist(){
       div.dataset.singer = v['singer'];
       div.dataset.time_s = v['time_s'];
       div.dataset.time_e = v['time_e'];
+      div.dataset.video_type = v['video_type'];
       
       // radio input
       let radio = document.createElement("input");
