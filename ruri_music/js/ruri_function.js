@@ -71,11 +71,7 @@ function setAction(){
         startTimer(this.value);
     }
   })
-  document.querySelectorAll('#playlist-field .item').forEach(item =>{
-//    if(item.dataset.video_type == "ショート"){
-      short_list.push(item.dataset.index);
-//    }
-  })
+
   document.getElementById('short_type').addEventListener("change", () => {
     console.log(document.getElementById('short_type').checked)
       if(!this.checked){
@@ -177,6 +173,10 @@ function crePlaylist(){
       div.dataset.time_s = v['time_s'];
       div.dataset.time_e = v['time_e'];
       div.dataset.video_type = v['video_type'];
+
+      if(v['video_type'] == "ショート"){
+        short_list.push(count);
+      }
       
       // radio input
       let radio = document.createElement("input");
@@ -297,5 +297,6 @@ function playNextVideo(){
   }
 
 }
+
 
 
