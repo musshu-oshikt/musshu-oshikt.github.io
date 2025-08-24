@@ -286,6 +286,12 @@ function playNextVideo(){
       } while (short_list.indexOf(random_list[randomindex]) > -1);
       if(randomindex >= playlength){
         setrandom_arry();
+        while (short_list.indexOf(random_list[randomindex]) > -1){
+          randomindex++;
+          if(randomindex >= playlength){
+            break;
+          }
+        }
       }
       Play(random_list[randomindex]);
     }else{
