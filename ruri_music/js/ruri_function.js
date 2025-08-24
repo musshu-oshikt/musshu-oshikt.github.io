@@ -7,6 +7,9 @@ let playlength = 0;
 let timer;
 let interval;
 let short_list = [];
+let all_list = [];
+let random_list = [];
+let randomindex = 0;
 const playlistUl = document.getElementById('playlist-field');
 ////////////////////////////////////////////////////////////
 // ファンクション
@@ -72,7 +75,7 @@ function setAction(){
     }
   })
 
-  document.getElementById('short_type').addEventListener("change", () => {
+  document.getElementById('short_type').addEventListener('change', () => {
       if(!document.getElementById('short_type').checked){
         document.querySelectorAll('#playlist-field .item').forEach(item =>{
           if(item.dataset.video_type == "ショート"){
@@ -87,6 +90,9 @@ function setAction(){
         })
       }
   });
+  document.getElementById('playtype').addEventListener('change',() => {
+    setrandom_arry();
+  })
   
   
 }
@@ -154,6 +160,13 @@ function resetTimer() {
     clearInterval(interval);
 //    startTimer();
 }
+////////////////////////////////////////////////////
+// ランダム設定
+function setrandom_arry() {
+  random_list = all_list.concat();
+  random_list.sort(() => Math.random() - 0.5);
+  randomindex = 0;
+}
 
 ////////////////////////////////////////////////////
 function crePlaylist(){
@@ -172,7 +185,7 @@ function crePlaylist(){
       div.dataset.time_s = v['time_s'];
       div.dataset.time_e = v['time_e'];
       div.dataset.video_type = v['video_type'];
-
+      all_list.push(count);
       if(v['video_type'] == "ショート"){
         short_list.push(count);
       }
@@ -263,17 +276,26 @@ function playNextVideo(){
   let short_bool = document.getElementById('short_type').checked;
   let newindex = Number(currentIndex);
   if (playOrder === 'random') {
-      let nextIndex;
-      if(!short_bool){
-        do {
-            nextIndex = Math.floor(Math.random() * playlength);
-        } while (nextIndex === currentIndex && playlength > 1); // 同じ曲が連続しないように
-      }else{
-        do {
-            nextIndex = Math.floor(Math.random() * playlength);
-        } while (nextIndex === currentIndex && playlength > 1 && short_list.indexOf(nextIndex) > -1); // 同じ曲が連続しないように
+    if(!short_bool){
+    //ショート除外時
+      do {
+        randomindex++;
+        if(randomindex >= playlength){
+          break;
+        }
+      } while (short_list.indexOf(random_list[randomindex]) > -1);
+      if(randomindex >= playlength){
+        setrandom_arry();
       }
-      Play(nextIndex);
+      Play(random_list[randomindex]);
+    }else{
+      if(randomindex >= playlength){
+        setrandom_arry();
+      }
+      Play(random_list[randomindex]);
+      randomindex++;
+    }
+    //第一週目のrandom_list[0]はとれない←普通にアホ。でも許して。
   } else { // sequential (降順)
     if(!short_bool){
       do {
