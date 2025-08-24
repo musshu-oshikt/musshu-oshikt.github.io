@@ -278,8 +278,8 @@ function playNextVideo(){
     if(!short_bool){
       do {
         newindex++;
-      } while (short_list.indexOf(newindex) > -1);
-        console.log('short_list:' + short_list + '  newindex:' + newindex + ' indexof:' + short_list.indexOf(newindex));
+      } while (short_list.indexOf(newindex) > -1);//とりあえずshortsリストに含まれるものは飛ばす
+      //なぜ飛ばされたか確認する。枠外に行ったor動画が引っ掛かった。
       if(newindex < playlength){
         Play(newindex);
       }else{
@@ -296,6 +296,7 @@ function playNextVideo(){
   }
 
 }
+
 
 
 
