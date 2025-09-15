@@ -7,7 +7,7 @@
 2.「Download ZIP」を押す<br>
 3.ZIPファイルを解凍し、ローカルの適当な場所に格納する<br>
 4.ダウンロードしたファイルの「/ruri_music/js/yourURL.js」を確認する（右クリックして「メモ帳で編集」）<br>
-5.「let Url = 'https://docs.google.com/spreadsheets/...''」のURL部分を自分のスプレッドシートのURLに書き換える<br>
+5.「let Url = ''」のURL部分を自分のスプレッドシートのURLに書き換える<br>
 6.ダウンロードしたファイルの「/ruri_music/index.html」を確認する（右クリックして「メモ帳で編集」）<br>
 7.お好みでカスタマイズ（AIに聞きながら編集するのがおすすめ）<br>
 8.お好みのサーバにカスタムしたファイルを格納してファンサイト公開！<br>
